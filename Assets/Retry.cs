@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Retry : MonoBehaviour
 {
-    public GameObject retry; 
+    public GameObject retry;
+    public AudioSource bgmAS;
 
     // Start is called before the first frame update
     void Start()
@@ -17,5 +18,6 @@ public class Retry : MonoBehaviour
     {
         Time.timeScale = 1f; // ゲームが停止していたら再開
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); // 現在のシーンを再読込
+        bgmAS.Play();
     }
 }
