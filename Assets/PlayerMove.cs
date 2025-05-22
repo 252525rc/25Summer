@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections;
 using UnityEngine.UI;
 
+
 public class PlayerMove : MonoBehaviour
 {
     public MazeGenerator mazeGen;
@@ -19,6 +20,7 @@ public class PlayerMove : MonoBehaviour
 
     public Animator animator;
     public AudioSource AS;
+    public AudioSource bgmAS;
     public AudioClip wallBroken;
     public AudioClip Goal;
     public AudioClip gameOver;
@@ -35,6 +37,7 @@ public class PlayerMove : MonoBehaviour
     private int buttonState = 0;
 
     public TextMeshProUGUI GameOvertxt;
+    public GameObject retryButton;
 
     void Start()
     {
@@ -240,6 +243,7 @@ public class PlayerMove : MonoBehaviour
 
         if(collision.gameObject.tag == "Goal")
         {
+            bgmAS.Stop();
             AS.PlayOneShot(Goal);
             Time.timeScale = 0;
             Debug.Log("ゴールに到達しました！");

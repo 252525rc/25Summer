@@ -137,6 +137,7 @@ MonoBehaviour:
   moveInterval: 0.3
   animator: {fileID: 7709532644575508660}
   AS: {fileID: 7887907871435607537}
+  bgmAS: {fileID: 814251502}
   wallBroken: {fileID: 8300000, guid: 628b8a098d83e6140816f24dcdd7c69a, type: 3}
   Goal: {fileID: 8300000, guid: 0185567b38a9da3449180efcd1ab6e9e, type: 3}
   gameOver: {fileID: 8300000, guid: 3c73b4c4656d9e343be3823c9bd79361, type: 3}
@@ -145,6 +146,7 @@ MonoBehaviour:
   Attack: 0
   canRotate: 1
   GameOvertxt: {fileID: 2019144515}
+  retryButton: {fileID: 0}
 --- !u!136 &63523915
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -195,7 +197,7 @@ Transform:
   m_GameObject: {fileID: 172817462}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 30, y: 50, z: 30}
+  m_LocalPosition: {x: 30, y: 60, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -463,8 +465,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -190}
-  m_SizeDelta: {x: 250, y: 60}
+  m_AnchoredPosition: {x: -350, y: -190}
+  m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &702054850
 MonoBehaviour:
@@ -739,6 +741,7 @@ GameObject:
   - component: {fileID: 892700699}
   - component: {fileID: 892700698}
   - component: {fileID: 892700697}
+  - component: {fileID: 892700701}
   m_Layer: 5
   m_Name: RetryButton
   m_TagString: Untagged
@@ -790,9 +793,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Score, Assembly-CSharp
-        m_MethodName: Retry
+      - m_Target: {fileID: 892700701}
+        m_TargetAssemblyTypeName: Retry, Assembly-CSharp
+        m_MethodName: RetryGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -857,9 +860,22 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -275}
-  m_SizeDelta: {x: 250, y: 60}
+  m_AnchoredPosition: {x: -350, y: -260}
+  m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &892700701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892700696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef613ceae139bd244a7201c8d67aa4be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  retry: {fileID: 892700696}
 --- !u!1 &1242325319
 GameObject:
   m_ObjectHideFlags: 0
