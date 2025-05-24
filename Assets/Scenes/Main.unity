@@ -145,8 +145,8 @@ MonoBehaviour:
   maxAttack: 0
   Attack: 0
   canRotate: 1
-  GameOvertxt: {fileID: 2019144515}
-  retryButton: {fileID: 0}
+  Finishtxt: {fileID: 2019144515}
+  retryButton: {fileID: 892700696}
 --- !u!136 &63523915
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1278,7 +1278,7 @@ GameObject:
   - component: {fileID: 2019144516}
   - component: {fileID: 2019144515}
   m_Layer: 5
-  m_Name: GameOverText
+  m_Name: FinishText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1350,15 +1350,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 250
+  m_fontSizeBase: 250
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

@@ -36,13 +36,13 @@ public class PlayerMove : MonoBehaviour
     // micro:bitのボタンの状態(0: なし、1: Aボタン、-1: Bボタン)
     private int buttonState = 0;
 
-    public TextMeshProUGUI GameOvertxt;
+    public TextMeshProUGUI Finishtxt;
     public GameObject retryButton;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        GameOvertxt.gameObject.SetActive(false);
+        Finishtxt.gameObject.SetActive(false);
 
         brokenCount = 3;
         maxAttack = 0;
@@ -236,7 +236,9 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            GameOvertxt.gameObject.SetActive(true);
+            Finishtxt.text = "GameOver";
+            Finishtxt.gameObject.SetActive(true);
+            bgmAS.Stop();
             AS.PlayOneShot(gameOver);
             Time.timeScale = 0;
         }
@@ -245,6 +247,8 @@ public class PlayerMove : MonoBehaviour
         {
             bgmAS.Stop();
             AS.PlayOneShot(Goal);
+            Finishtxt.text = "GameClear";
+            Finishtxt.gameObject.SetActive(true);
             Time.timeScale = 0;
             Debug.Log("ゴールに到達しました！");
         }
