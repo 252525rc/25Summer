@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class WallColor : MonoBehaviour
 {
-    public Color wall;
-    public PlayerMove playerController;
+    private Color wall;
+    private PlayerMove playerController;
     public int x, y; // この壁が対応する maze の位置
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,9 +22,8 @@ public class WallColor : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Sword" && playerController.Attack && playerController.brokenCount > 0)
-        {
-            
+        if (other.gameObject.tag == "Sword" && playerController.Attack)
+        {   
             switch (playerController.maxAttack)
             {
                 case 1:
@@ -37,12 +37,15 @@ public class WallColor : MonoBehaviour
                     Break();
                     break;
             }
+            
         }
+
     }
     public void Break()
     {
         // グローバルの maze 配列を参照する方法は後述
         MazeGenerator.maze[x, y] = 0;
         Destroy(this.gameObject); // 壁を破壊
+        playerController.brokenCount--;
     }
 }

@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System;
-using TMPro;
 using System.Collections;
 using UnityEngine.UI;
+using Unity.Burst.CompilerServices;
 
 
 public class PlayerMove : MonoBehaviour
 {
     public MazeGenerator mazeGen;
+    public WallColor wallColor;
     public float moveDuration = 0.2f;
     public float moveInterval = 0.3f;
 
@@ -22,12 +23,14 @@ public class PlayerMove : MonoBehaviour
     public AudioSource AS;
     public AudioSource bgmAS;
     public AudioClip wallBroken;
+    public AudioClip swing;
     public AudioClip Goal;
     public AudioClip gameOver;
 
     public int brokenCount;
     public int maxAttack;
     public bool Attack = false;
+    public bool hit;
 
     public bool canRotate = true;
     private float tiltX = 0f;
@@ -36,7 +39,8 @@ public class PlayerMove : MonoBehaviour
     // micro:bitのボタンの状態(0: なし、1: Aボタン、-1: Bボタン)
     private int buttonState = 0;
 
-    public TextMeshProUGUI Finishtxt;
+    public Text Finishtxt;
+    public Text Counttxt;
     public GameObject retryButton;
 
     void Start()
@@ -50,12 +54,14 @@ public class PlayerMove : MonoBehaviour
         maze = mazeGen.GetMaze();
         cellSize = mazeGen.cellSize;
         currentPos = mazeGen.GetStartPos();
+        Counttxt.text = "BROKEN:" + brokenCount;
 
         transform.position = new Vector3(currentPos.x * cellSize, -1f, currentPos.y * cellSize);
     }
 
     void Update()
     {
+       
         if (!isMoving && !Attack)
         {
             HandleRotationInput();
@@ -90,6 +96,20 @@ public class PlayerMove : MonoBehaviour
 
     }
 
+    void HandleRotationInput()
+    {
+        float rotationAmount = 90f;
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+        {
+            StartCoroutine(SmoothRotate(-rotationAmount));
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        {
+            StartCoroutine(SmoothRotate(rotationAmount));
+        }
+    }
+
     void HandleTiltRotation()
     {
         if (canRotate)
@@ -118,28 +138,26 @@ public class PlayerMove : MonoBehaviour
     {
         Attack = true;
 
-        for (int i = 0; i < 3; i++)
+        for ( int i = 0; i < 3; i++)
         {
             animator.SetTrigger("isAttack");
-            AS.PlayOneShot(wallBroken); 
             maxAttack++;
-
+            if (hit)
+            {
+                AS.PlayOneShot(wallBroken);
+            }
+            else
+            {
+                AS.PlayOneShot(swing);
+            }
             // 攻撃アニメーションの長さに応じてWait
             // 例：0.5秒のアニメーションなら
             yield return new WaitForSeconds(0.5f);
-
             animator.ResetTrigger("isAttack");
         }
-
-        
-
-        if (maxAttack == 3)
-        {
-            brokenCount--;
-            maxAttack = 0;
-        }
-
+        maxAttack = 0;
         Attack = false;
+        Counttxt.text = "BROKEN:" + brokenCount;
     }
 
     IEnumerator MoveContinuousLoop()
@@ -160,20 +178,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-
-    void HandleRotationInput()
-    {
-        float rotationAmount = 90f;
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            transform.Rotate(0f, -rotationAmount, 0f);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            transform.Rotate(0f, rotationAmount, 0f);
-        }
-    }
 
     bool GetForwardInput()
     {
@@ -232,6 +236,26 @@ public class PlayerMove : MonoBehaviour
         animator.SetBool("isMoving", false);
     }
 
+    IEnumerator SmoothRotate(float angle)
+    {
+        isMoving = true;  // 回転中は移動できないようにする
+        Quaternion startRotation = transform.rotation;
+        Quaternion endRotation = startRotation * Quaternion.Euler(0, angle, 0);
+        float duration = 0.2f;  // 回転にかかる時間
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(startRotation, endRotation, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = endRotation;
+        isMoving = false;
+    }
+
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -252,6 +276,18 @@ public class PlayerMove : MonoBehaviour
             Time.timeScale = 0;
             Debug.Log("ゴールに到達しました！");
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "wall") hit = true;
+        //Debug.Log(hit);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "wall") hit = false;
+        //Debug.Log(hit);
     }
 
     // micro:bit 傾きデータ（X軸）
